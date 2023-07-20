@@ -1,13 +1,17 @@
 {
-  "name": "eveesi",
+  "name": "wiki-js-eve-sso",
   "version": "1.0.0",
-  "description": "an evi esi based passport strategy integration",
+  "description": "clone this project into `server/modules/authentication` under the root of the wiki.js project.",
   "main": "authentication.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "github.com/slwst/wiki-js-eve-sso"
+  },
+  "author": "slwst",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "passport-eveonline-sso": "github:eve-scout/passport-eveonline-sso"
   }
