@@ -1,0 +1,16 @@
+key: wiki-js-eve-sso
+title: 'Eve Online ESI'
+author: 'slwst'
+useForm: false
+isAvailable: true
+props:
+  clientID:
+    type: String
+    title: 'Client ID'
+    hint: 'Application Client ID'
+    order: 1
+  clientSecret:
+    type: String
+    title: 'Client Secret'
+    hint: 'Application Client Secret'
+    order: 2
