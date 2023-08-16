@@ -14,3 +14,21 @@ props:
     title: 'Client Secret'
     hint: 'Application Client Secret'
     order: 2
+  allowedCorps:
+    type: String
+    multiline: true
+    title: 'Allowed Corporations'
+    hint: 'A list of corporation names which are allowed to join the wiki. [new line delimited]'
+    order: 3
+  disallowedTitles:
+    type: String
+    multiline: true
+    title: 'Disallowed Titles'
+    hint: 'A list of titles that are forbidden from joining the wiki.  [new line delimited]'
+    order: 4
+  mapGroups:
+    type: Boolean
+    default: false
+    title: 'Map Titles to Groups'
+    hint: 'If true, all members will be placed in the groups matching their titles.'
+    order: 5
