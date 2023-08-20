@@ -3,6 +3,7 @@
 // ------------------------------------
 // Eve Online ESI
 // ------------------------------------
+const _ = require('lodash')
 
 const EveOnlineSsoStrategy = require('passport-eveonline-sso').Strategy;
 
@@ -14,7 +15,7 @@ module.exports = {
       callbackURL: conf.callbackURL,
       passReqToCallback: true,
       scope: "publicData esi-characters.read_titles.v1",
-    }, async (req, accessToken, profile, cb) => {
+    }, async (req, accessToken, refreshToken, profile, cb) => {
       try {
 
         const failTitles = conf.disallowedTitles.split("\n")
