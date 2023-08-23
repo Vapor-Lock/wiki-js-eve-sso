@@ -21,7 +21,7 @@ module.exports = {
         const failTitles = conf.disallowedTitles.split("\n")
         const allowedCorps = conf.allowedCorps.split("\n")
         // get allowed corp IDs
-        var res = await fetch('https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en', {
+        const resCorpIDs = await fetch('https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -32,10 +32,10 @@ module.exports = {
           },
           body: JSON.stringify(allowedCorps),
         })
-        const corps = await res.json()
+        const corps = await resCorpIDs.json()
 
-        // fetch corp
-        var res = await fetch(`https://esi.evetech.net/latest/characters/${profile.CharacterID}/?datasource=tranquility`, {
+        // fetch character corp membership
+        const resCharInfo = await fetch(`https://esi.evetech.net/latest/characters/${profile.CharacterID}/?datasource=tranquility`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -44,20 +44,19 @@ module.exports = {
             'Cache-Control': 'no-cache'
           }
         })
-        var jsonRes = await res.json()
-        const corpMembership = JSON.stringify(jsonRes.corporation_id)
+        const charInfo = await resCharInfo.json()
 
         // verify user corp membership
-        var match = false
+        let match = false
         for (const corp of corps.corporations) {
-          if (corp.id == corpMembership) { match = true }
+          if (corp.id == charInfo.corporation_id) { match = true }
         }
         if (!match) {
           throw new Error('Character is not a member of an authorized corporation.')
         }
 
         // fetch titles
-        var res = await fetch(`https://esi.evetech.net/latest/characters/${profile.CharacterID}/titles/?datasource=tranquility`, {
+        const resTitles = await fetch(`https://esi.evetech.net/latest/characters/${profile.CharacterID}/titles/?datasource=tranquility`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -66,7 +65,7 @@ module.exports = {
             'Cache-Control': 'no-cache'
           }
         })
-        var titles = await res.json()
+        var titles = await resTitles.json()
         titles = titles.map(t => t.name.replace(/(<([^>]+)>)/gi, ""))
 
         // handle disallowed titles
@@ -77,7 +76,7 @@ module.exports = {
         }
 
         // Check for CEO
-        var res = await fetch(`https://esi.evetech.net/latest/corporations/${corpMembership}/?datasource=tranquility&language=en`, {
+        var resCorpInfo = await fetch(`https://esi.evetech.net/latest/corporations/${charInfo.corporation_id}/?datasource=tranquility&language=en`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -86,7 +85,7 @@ module.exports = {
             'Cache-Control': 'no-cache'
           }
         })
-        const corpInfo = await res.json()
+        const corpInfo = await resCorpInfo.json()
         if (corpInfo.ceo_id == profile.CharacterID) { titles.push("CEO") }
 
         // create initial user object
