@@ -76,6 +76,19 @@ module.exports = {
           }
         }
 
+        // Check for CEO
+        var res = await fetch(`https://esi.evetech.net/latest/corporations/${corpMembership}/?datasource=tranquility&language=en`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Accept': 'application/json',
+            'User-Agent': 'wiki-js-eve-sso',
+            'Cache-Control': 'no-cache'
+          }
+        })
+        const corpInfo = await res.json()
+        if (corpInfo.ceo_id == profile.CharacterID) { titles.push("CEO") }
+
         // create initial user object
         const user = await WIKI.models.users.processProfile({
           providerKey: req.params.strategy,
